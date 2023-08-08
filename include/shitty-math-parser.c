@@ -4,6 +4,7 @@ bool is_operator (char c) {
     return c == '+' || c == '-' || c == '*' || c == '/' || c == '^' || c == '%';
 }
 
+char* states[] = {"ExpectingOperand", "ExpectingComma", "ExpectingOperator", "ExpectingLeftParanthesis", "ExpectingRightParanthesis", "Default", "Error"};
 
 ParseTree* create_parse_tree () {
     ParseTree* parse_tree = malloc(sizeof(ParseTree));
@@ -15,7 +16,22 @@ ParseTree* create_parse_tree () {
     return parse_tree;
 }
 
+void set_state (State* state, State* prev_state, State new_state) {
+    *prev_state = *state;
+    *state = new_state;
+}
+
+bool state_is (State* state, State expected_state) {
+    return *state == expected_state;
+}
+
 ParseTree *parse_expr (char* expr) {
+
+    State s = ExpectingLeftParenthesis;
+    State prev_s = Default;
+    State* state = &s;
+    State* prev_state = &prev_s;
+
     printf("Parsing expression: %s", expr);
     char* expression = expr;
     if (expr[0] != '(') {
@@ -41,7 +57,7 @@ ParseTree *parse_expr (char* expr) {
             temp = current;
             current = current->left;
             current->parent = temp;
-
+            set_state(state, prev_state, ExpectingOperand);
         }
 
         else if (c == ')') {
@@ -51,6 +67,18 @@ ParseTree *parse_expr (char* expr) {
         }
 
         else if (is_operator(c)) {
+            if (state_is(state, ExpectingRightParenthesis) && state_is(prev_state, ExpectingOperand)) {
+                // handle consecutive operators case
+                temp = current;
+                current->right->left = create_parse_tree();
+                current = current->right->left;
+                current->data = temp->right->data;
+                current->parent = temp->right;
+                current = temp->right;
+                temp = NULL;
+                printf("\n\n%c", current->left->data);
+            }
+            set_state(state, prev_state, ExpectingOperand);
             current->data = c;
             current->type = Operator;
             current->right = create_parse_tree();
@@ -65,7 +93,14 @@ ParseTree *parse_expr (char* expr) {
             current->data = c;
             current->type = Number;
             current = current->parent;
+            if (state_is(state, ExpectingOperand) && state_is(prev_state, ExpectingOperator)) {
+                set_state(state, prev_state, ExpectingRightParenthesis);
+            }
+            else {
+                set_state(state, prev_state, ExpectingOperator);
+            }
         }
+        printf("\n%s, %s", states[*state], states[*prev_state]);
     }
 
     return current;
