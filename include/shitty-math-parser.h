@@ -9,7 +9,7 @@ typedef enum {
 } TokenType;
 
 typedef enum {
-    ExpectingOperand, ExpectingComma, ExpectingOperator, ExpectingLeftParenthesis, ExpectingRightParenthesis, Default, Error
+    ExpectingOperand, ExpectingComma, ExpectingOperator, ExpectingLeftParenthesis, ExpectingRightParenthesis, Default, Error, GotLeftParenthesis, GotRightParenthesis
 } State;
 
 

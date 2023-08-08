@@ -32,14 +32,27 @@ ParseTree *parse_expr (char* expr) {
     State* state = &s;
     State* prev_state = &prev_s;
 
-    printf("Parsing expression: %s", expr);
+    size_t length = strlen(expr);
+    short start_index = 0;
     char* expression = expr;
     if (expr[0] != '(') {
-        // add left parenthesis is not present later
-        printf("Expression must start with a left parenthesis");
-        return NULL;
+        length++;
+        start_index = 1;
     }
-    size_t length = strlen(expression);
+    if (expr[length - 1] != ')') {
+        length++;
+    }
+
+    expression = (char*)malloc(sizeof(char) * (length + 1));
+
+    if (expr[0] != '(') expression[0] = '(';
+    if (expr[length - 1] != ')') expression[length - 1] = ')';
+    for (size_t i = 0; i < strlen(expr); i++) {
+        expression[start_index + i] = expr[i];
+    }
+    expression[length] = '\0';
+    printf("%s", expression);
+
 
     ParseTree* temp = NULL;
     ParseTree* current = create_parse_tree();
@@ -102,6 +115,7 @@ ParseTree *parse_expr (char* expr) {
         }
         printf("\n%s, %s", states[*state], states[*prev_state]);
     }
+
 
     return current;
 }

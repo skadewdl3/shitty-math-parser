@@ -12,7 +12,7 @@ void traverse_inorder (ParseTree* parse_tree) {
 }
 
 int main() {
-    ParseTree* parse_tree = parse_expr("(1 + 2 + 3)");
+    ParseTree* parse_tree = parse_expr("1 + 2 + 3");
     printf("\n");
     traverse_inorder(parse_tree);
     printf("\n%lf", evaluate_expr(parse_tree));
