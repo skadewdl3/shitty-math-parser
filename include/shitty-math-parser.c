@@ -231,12 +231,53 @@ double evaluate_expr_recursion (Parser* parser, ParseTree* parse_tree, char* exp
             }
         }
         else if (parse_tree->token->type == Token_Function) {
-            char data[parse_tree->token->end - parse_tree->token->start + 2];
-            for (size_t i = parse_tree->token->start, j = 0; i < parse_tree->token->end + 1; i++, j++) {
+
+            size_t start = parse_tree->token->start;
+            size_t end = parse_tree->token->end;
+            char data[end - start + 2];
+            for (size_t i = start, j = 0; i < end + 1; i++, j++) {
                 data[j] = expression[i];
             }
-            data[parse_tree->token->end - parse_tree->token->start + 1] = '\0';
-            printf("\n%s\n", data);
+            data[end - start + 1] = '\0';
+
+            size_t cur = start;
+
+            Parser* temp_parser = create_parser();
+            temp_parser->variables = parser->variables;
+            temp_parser->functions = parser->functions;
+
+            double* args = (double*)malloc(sizeof(double));
+            size_t args_length = 0;
+            bool should_stop = false;
+            while (!should_stop) {
+                size_t delim = cur;
+                while (expression[cur + 1] != ',') {
+                    if (delim == end) {
+                        should_stop = true;
+                        delim = end;
+                        break;
+
+                    }
+                    delim++;
+                }
+                char temp[delim - cur + 2];
+                for (size_t i = cur, j = 0; i < delim + 1; i++, j++) {
+                    temp[j] = expression[i];
+                }
+                temp[delim - cur + 1] = '\0';
+//                printf("\n\nheheboi: %s\n\n", temp);
+                parse(temp_parser, temp);
+                double res = evaluate_expr(temp_parser, temp);
+                args = realloc(args, sizeof(double) * (args_length + 1));
+                if (args == NULL) {
+                    should_stop = true;
+                    break;
+                }
+                args[args_length] = res;
+                args_length++;
+                cur = delim + 2;
+            }
+            return parser->functions->definitions[0](args, args_length);
         }
         else {
             return strtod(data, NULL);

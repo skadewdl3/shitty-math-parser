@@ -37,7 +37,7 @@ typedef struct {
     double* values;
 } Variables;
 
-typedef double (*ParserFunction)(double a, ...);
+typedef double (*ParserFunction)(double* args, size_t length);
 
 typedef struct {
     int length;
