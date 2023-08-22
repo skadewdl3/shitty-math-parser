@@ -1,0 +1,1 @@
+/usr/bin/cc -g CMakeFiles/shitty_math_parser.dir/main.c.o "CMakeFiles/shitty_math_parser.dir/include/shitty-math-parser.c.o" -o shitty_math_parser  -lm 

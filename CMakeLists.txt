@@ -5,3 +5,4 @@ set(CMAKE_C_STANDARD 11)
 
 add_executable(shitty_math_parser main.c include/shitty-math-parser.c)
 target_include_directories(shitty_math_parser PRIVATE include)
+target_link_libraries(shitty_math_parser m)

@@ -6,7 +6,7 @@
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.25"
@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "shitty_math_parser::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-shitty_math_parser-Debug-383398a95dc840647fcb.json",
+					"jsonFile" : "target-shitty_math_parser-Debug-aa150cba1eaac410ba80.json",
 					"name" : "shitty_math_parser",
 					"projectIndex" : 0
 				}
@@ -49,12 +49,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/soham/Projects/shitty-math-parser/cmake-build-debug",
-		"source" : "C:/Users/soham/Projects/shitty-math-parser"
+		"build" : "/home/skadewdl3/Projects/shitty-math-parser/cmake-build-debug",
+		"source" : "/home/skadewdl3/Projects/shitty-math-parser"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 4
+		"minor" : 5
 	}
 }
