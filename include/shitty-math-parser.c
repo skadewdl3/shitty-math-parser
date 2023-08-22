@@ -193,19 +193,16 @@ double calculate (double a, char operator, double b) {
     switch (operator) {
         case '+':
             return a + b;
-            break;
         case '-':
             return a - b;
-            break;
         case '*':
             return a * b;
-            break;
         case '/':
             return a / b;
-            break;
         case '%':
             return (int)a % (int)b;
-            break;
+        case '^':
+            return pow(a, b);
         default:
             printf("Invalid operator: %c", operator);
             return 0;
@@ -215,7 +212,7 @@ double calculate (double a, char operator, double b) {
 
 double evaluate_expr_recursion (Parser* parser, ParseTree* parse_tree, char* expression) {
     if (parse_tree == NULL) {
-        return -1;
+        return 0;
     }
     if (parse_tree->left == NULL && parse_tree->right == NULL) {
         char data[parse_tree->token->end - parse_tree->token->start + 2];
@@ -285,8 +282,11 @@ double evaluate_expr_recursion (Parser* parser, ParseTree* parse_tree, char* exp
     }
     double val1 = evaluate_expr_recursion(parser, parse_tree->left, expression);
     double val2 = evaluate_expr_recursion(parser, parse_tree->right, expression);
+    if (parse_tree->token == NULL) {
+        return calculate(val1, '+', val2);
+    }
     return calculate(val1, expression[parse_tree->token->start], val2);
-    return -1;
+    return 0;
 }
 
 double evaluate_expr (Parser* parser, char* expression) {
